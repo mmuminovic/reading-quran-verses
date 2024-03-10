@@ -3,19 +3,31 @@
   "version": "1.0.0",
   "main": "node_modules/expo/AppEntry.js",
   "scripts": {
-    "start": "expo start",
+    "start": "npx expo start",
     "android": "expo start --android",
     "ios": "expo start --ios",
-    "web": "expo start --web"
+    "web": "expo start --web",
+    "lint": "eslint ."
   },
   "dependencies": {
+    "@kmaslesa/quran-metadata": "^1.0.24",
+    "axios": "^1.6.7",
     "expo": "~50.0.11",
+    "expo-av": "~13.10.5",
     "expo-status-bar": "~1.11.1",
     "react": "18.2.0",
-    "react-native": "0.73.4"
+    "react-i18next": "^14.1.0",
+    "react-native": "0.73.4",
+    "react-native-dropdown-picker": "^5.4.6",
+    "react-native-size-matters": "^0.4.2",
+    "react-native-vector-icons": "^10.0.3",
+    "react-query": "^3.39.3"
   },
   "devDependencies": {
-    "@babel/core": "^7.20.0"
+    "@babel/core": "^7.20.0",
+    "eslint": "^8.57.0",
+    "eslint-config-universe": "^12.0.0",
+    "prettier": "^3.2.5"
   },
   "private": true
 }
