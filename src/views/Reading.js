@@ -1,7 +1,6 @@
 import quranMetaData from "@kmaslesa/quran-metadata";
 import { Audio } from "expo-av";
 import React, { useState, useMemo, useCallback, useEffect } from "react";
-import { useTranslation } from "react-i18next";
 import {
   Text,
   View,
@@ -11,6 +10,7 @@ import {
   ActivityIndicator,
   ScrollView,
   TouchableWithoutFeedback,
+  Alert,
 } from "react-native";
 import DropDownPicker from "react-native-dropdown-picker";
 import { moderateScale } from "react-native-size-matters";
@@ -42,10 +42,9 @@ const reciters = [
   },
 ];
 
-const Reading = ({ selectedAyah, closeDialog }) => {
+const Reading = () => {
   const { width, height } = Dimensions.get("window");
   const [open, setOpen] = useState(false);
-  const { t, i18n } = useTranslation();
   const [sound, setSound] = useState();
   const [isPlaying, setIsPlaying] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -61,6 +60,7 @@ const Reading = ({ selectedAyah, closeDialog }) => {
   // const tabHeight = useBottomTabBarHeight();
   // const headerHeight = useHeaderHeight();
   const [suraEndAyahNumber, setSuraEndAyahNumber] = useState(0);
+  const [lang] = useState("en");
 
   // const progress = parseFloat((audioPosition / durationMillis).toFixed(2));
   const translateAyahResponseHandler = (data, timings) => {
@@ -78,7 +78,6 @@ const Reading = ({ selectedAyah, closeDialog }) => {
         end: timings.segments[i][1],
       }));
       setText(arabicTextWords);
-      // setAyahReference({ surah: +surah, ayah: +ayah });
 
       const { numberOfAyas } = quranMetaData.getSuraByIndex(surah);
       setSuraEndAyahNumber(numberOfAyas);
@@ -100,7 +99,7 @@ const Reading = ({ selectedAyah, closeDialog }) => {
   }, []);
 
   const quranTranslation = useMemo(() => {
-    switch (i18n.language) {
+    switch (lang) {
       case "tr":
         return "turkish_rwwad";
       case "bs":
@@ -114,7 +113,7 @@ const Reading = ({ selectedAyah, closeDialog }) => {
       default:
         return "bosnian_korkut";
     }
-  }, [i18n.language]);
+  }, [lang]);
 
   const { mutateAsync: translateAyah, isLoading: isLoadingTranslation } =
     useMutation((data) =>
@@ -203,7 +202,7 @@ const Reading = ({ selectedAyah, closeDialog }) => {
       setSound(data.sound);
       await data.sound.playAsync();
     } catch (err) {
-      console.log(err);
+      Alert.alert("Error", err.message, [{ text: "OK" }]);
     } finally {
       setIsLoading(false);
     }
@@ -222,8 +221,20 @@ const Reading = ({ selectedAyah, closeDialog }) => {
   }, [sound]);
 
   useEffect(() => {
-    pickAyah();
+    if (ayahReference) {
+      pickAyah();
+    }
   }, [reciter, ayahReference]);
+
+  useEffect(() => {
+    const numOfChapter = Math.floor(Math.random() * 114 + 1);
+
+    const numOfVerse = Math.floor(
+      Math.random() * chapters[numOfChapter - 1].count + 1
+    );
+
+    setAyahReference({ surah: numOfChapter, ayah: numOfVerse });
+  }, []);
 
   const getNextAyah = () => {
     setAyahReference((prev) => ({ ...prev, ayah: prev.ayah + 1 }));
