@@ -21,10 +21,17 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "package": "com.mmuminovic.readingquranverses"
     },
     "web": {
       "favicon": "./assets/favicon.png"
-    }
+    },
+    "extra": {
+      "eas": {
+        "projectId": "96f6d8a6-d380-4507-9407-56f4b99fc50d"
+      }
+    },
+    "owner": "mmuminovic"
   }
 }
